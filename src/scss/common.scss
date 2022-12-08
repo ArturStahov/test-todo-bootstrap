@@ -11,6 +11,9 @@ html {
     padding: 0;
     box-sizing: inherit;
   }
+  label {
+    color: black;
+  }
   
   body {
     background-color: $base-page-color;
@@ -18,6 +21,7 @@ html {
     font-size: 1.6rem;
     color: $base-font-color;
     scroll-behavior: smooth;
+    height: 100vh;
   }
   
   img {
@@ -46,6 +50,10 @@ html {
       width: $desktop-w;
     }
   }
+
+  .open-modal {
+    overflow: hidden;
+  } 
   
   .visually-hidden:not(:focus):not(:active),
   input[type='checkbox'].visually-hidden,

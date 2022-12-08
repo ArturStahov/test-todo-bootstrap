@@ -2,3 +2,9 @@
 @import "./helpers/variables";
 @import "./helpers/mixins";
 @import "./common";
+
+
+@import "./header/header";
+@import "./modals/modal-create.scss";
+@import "./main/main";
+

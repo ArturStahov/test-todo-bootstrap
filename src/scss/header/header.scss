@@ -1,0 +1,30 @@
+.logo {
+    font-size: 2rem;
+    color: white;
+    font-weight: bold;
+}
+
+.logo-svg {
+    fill: white;
+    transition: fill 0.3s ease-in;
+
+    &:hover {
+        fill: red;
+    }
+}
+
+.button-add {
+    width: 30px;
+    height: 30px;
+    background: transparent;
+    fill: white;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    transition: fill 0.4s ease-in;
+
+    &:hover {
+        fill: yellow;
+    }
+}
+
