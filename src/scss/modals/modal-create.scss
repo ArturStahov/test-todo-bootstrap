@@ -32,6 +32,7 @@
     }
 
     .modal-content {
+        display: flex;
         border-radius: 4px;
         position: relative;
         padding: 5px;
@@ -45,6 +46,21 @@
         }
         &__title {
             @include font-settings(1.6rem, 1.2, 600, #000000);
+        }
+        &__form-wrapper {
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+        &__controllers {
+            display: flex;
+            justify-content: flex-end;
+            .btn {
+                width: 150px;
+                height: 30px;
+                &:not(:last-child){
+                    margin-right: 15px;
+                }
+            }
         }
     }
 
