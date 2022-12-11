@@ -47,17 +47,7 @@
   <main class="main">
     <div class="container">
 
-      <section class="cards">
-
-        <div class="card" style="width: 18rem;">
-          <img src="https://cdn.pixabay.com/photo/2015/12/09/01/02/mandalas-1084082_960_720.jpg" class="card-img-top" alt="#">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-danger">delete</a>
-            <a href="#" class="btn btn-primary">edit</a>
-          </div>
-        </div>
+      <section class="cards" data-cards="list">
 
       </section>
 
@@ -67,25 +57,25 @@
 
   </footer>
   <!-- Modal -->
-<div class="modal-create" data-modal="create">
-  <div class="modal-content">
-    <div class="modal-content__header">
-      <h3 class="modal-content__title">Create TODO</h3>
-       <button class="modal-create_button-close" data-modal-close="close"> &#10007; </button>
-    </div>
-    <div class="modal-content__form-wrapper" data-modal-content="content">
+  <div class="modal-create" data-modal-create="create">
+    <div class="modal-content">
+      <div class="modal-content__header">
+        <h3 class="modal-content__title">Create TODO</h3>
+        <button class="modal-create_button-close" data-modal-close="close"> &#10007; </button>
+      </div>
+      <form class="modal-content__form-wrapper" data-modal-content="content">
 
-      
-      
-    </div>
 
-    <div class="modal-content__controllers">
-      <button type="button" class="btn btn-danger" data-modal-close="close" >Cancel</button>
-      <button type="button" class="btn btn-primary" data-modal-close="close" >Create</button>
-      
+
+      </form>
+
+      <div class="modal-content__controllers">
+        <button type="button" class="btn btn-danger" data-modal-close="close">Cancel</button>
+        <button type="submit" class="btn btn-primary" data-modal-button="create">Create</button>
+
+      </div>
     </div>
   </div>
-</div>
 
 </body>
 

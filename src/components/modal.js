@@ -1,3 +1,4 @@
+import uniqid from 'uniqid';
 
 const refs = {
     btn: null,
@@ -5,12 +6,13 @@ const refs = {
     body: document.body,
     btnsClose: [],
     contentNode: null,
-}
+    btnCreate: null,
+};
 
 export function initModal(config) {
     refs.btn = document.querySelector(config.selectorBtn);
     refs.modal = document.querySelector(config.selectorModal);
-    refs.contentNode = refs.modal.querySelector('[data-modal-content="content"]')
+    refs.contentNode = refs.modal.querySelector('[data-modal-content="content"]');
 
     if (refs.btn && refs.modal) {
         refs.btn.addEventListener('click', openModal);
@@ -18,60 +20,100 @@ export function initModal(config) {
         refs.modal.addEventListener('click', closeModal);
         refs.btnsClose.forEach(btn => {
             btn.addEventListener('click', closeModal);
-        })
+        });
+        refs.btnCreate = refs.modal.querySelector('[data-modal-button="create"]');
+        refs.btnCreate && refs.btnCreate.addEventListener('click', (e) => {
+            actionCreatePayload(config.action);
+        });
     }
 
     renderFields(config.fields);
 }
 
-function createInputTemplate(option,index) {
-    const template = `<div class="form-floating">
-    <input type="${option.type}" class="form-control" id="floating-${index}">
-    <label for="floating-${index}">${option.label}</label>
-  </div>`
-  return template;
+function actionCreatePayload(action) {
+    let payload = {};
+    const fields = refs.modal.querySelectorAll('[data-modal="text-field"]');
+    if (fields.length) {
+        fields.forEach(field => {
+            payload = {
+                ...payload,
+                [field.dataset.code]: field.value,
+            }
+        })
+    }
+
+    payload.id = uniqid();
+
+    const isEmptySomeValue = Object.values(payload).some(item => !item);
+
+    if (!isEmptySomeValue) {
+        action(payload);
+        clearFormFields();
+        eventClose();
+    } else {
+        console.log('have empty value');
+    }
+
 }
 
-function createTextAreaTemplate(option,index) {
-    const template = `<div class="form-floating">
-    <textarea class="form-control" id="floating-${index}" style="height: 100px; resize:none;"></textarea>
-    <label for="floating-${index}">${option.label}</label>
-  </div>`
-  return template;
+function clearFormFields() {
+    const fields = refs.modal.querySelectorAll('[data-modal="text-field"]');
+    if (fields.length) {
+        fields.forEach(field => {
+            field.value = '';
+        })
+    }
 }
 
-function flowRenderTemplate(option,index) {
+function createInputTemplate(option, index) {
+    const template = `<div class="form-fields">
+    <label for="fields-${index}">${option.label}</label>
+    <input type="${option.type}" class="form-control" data-modal="text-field" data-code="${option.code}" id="fields-${index}">
+  </div>`;
+    return template;
+}
+
+function createTextAreaTemplate(option, index) {
+    const template = `<div class="form-fields">
+    <label for="fields-${index}">${option.label}</label>
+    <textarea class="form-control" id="fields-${index}" data-modal="text-field" data-code="${option.code}" style="height: 100px; resize:none;"></textarea>
+  </div>`;
+    return template;
+}
+
+function flowRenderTemplate(option, index) {
     const flows = {
         ['text']: createInputTemplate,
-        ['text-area']: createTextAreaTemplate
-    }
-    return flows[option.type](option,index);
+        ['text-area']: createTextAreaTemplate,
+    };
+    return flows[option.type](option, index);
 }
 
 function renderFields(fields) {
     let template = '';
     fields.forEach((option, index) => {
-        template += flowRenderTemplate(option,index);
-    })
+        template += flowRenderTemplate(option, index);
+    });
 
-    refs.contentNode.insertAdjacentHTML("beforeend",template)
+    refs.contentNode.insertAdjacentHTML('beforeend', template);
 }
 
 export function openModal() {
     refs.modal && refs.modal.classList.add('open');
     refs.body && refs.body.classList.add('open-modal');
-    window.addEventListener("keydown", closeDownEsc)
+    window.addEventListener('keydown', closeDownEsc);
 }
 
 function closeDownEsc(event) {
-    if (event.key === "Escape") {
+    if (event.key === 'Escape') {
         eventClose();
     }
+
 }
 
 export function closeModal(event) {
-    const {modalClose, modal } = event.target.dataset;
-    if (modalClose || modal) {
+    const { modalClose, modalCreate } = event.target.dataset;
+    if (modalClose || modalCreate) {
         eventClose();
     }
 }
@@ -79,5 +121,5 @@ export function closeModal(event) {
 function eventClose() {
     refs.modal && refs.modal.classList.remove('open');
     refs.body && refs.body.classList.remove('open-modal');
-    window.removeEventListener("keydown", closeDownEsc);
+    window.removeEventListener('keydown', closeDownEsc);
 }
