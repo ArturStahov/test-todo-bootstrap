@@ -1,7 +1,7 @@
 import uniqid from 'uniqid';
 
 const refs = {
-    btn: null,
+    btnOpenModal: null,
     modal: null,
     body: document.body,
     btnsClose: [],
@@ -9,13 +9,15 @@ const refs = {
     btnCreate: null,
 };
 
+let editItemId = null;
+
 export function initModal(config) {
-    refs.btn = document.querySelector(config.selectorBtn);
+    refs.btnOpenModal = document.querySelector(config.selectorBtn);
     refs.modal = document.querySelector(config.selectorModal);
     refs.contentNode = refs.modal.querySelector('[data-modal-content="content"]');
 
-    if (refs.btn && refs.modal) {
-        refs.btn.addEventListener('click', openModal);
+    if (refs.btnOpenModal && refs.modal) {
+        refs.btnOpenModal.addEventListener('click', openModalEvent);
         refs.btnsClose = refs.modal.querySelectorAll('[data-modal-close="close"]');
         refs.modal.addEventListener('click', closeModal);
         refs.btnsClose.forEach(btn => {
@@ -30,6 +32,28 @@ export function initModal(config) {
     renderFields(config.fields);
 }
 
+function openModalEvent() {
+    editItemId = null;
+    const button = refs.modal.querySelector('[data-modal-button="create"]');
+    button && (button.textContent = 'Created');
+    openModal();
+}
+
+
+export function editTodo(editItem) {
+    editItemId = editItem.id;
+    console.log(editItem)
+    const fields = refs.modal.querySelectorAll('[data-modal="text-field"]');
+    fields.forEach(field => {
+        const fieldCode = field.dataset.code;
+        field.value = editItem[fieldCode]; editItem['image'];
+        console.log(fieldCode, 'fieldCode')
+    })
+    const button = refs.modal.querySelector('[data-modal-button="create"]');
+    button && (button.textContent = 'Edit');
+    openModal();
+}
+
 function actionCreatePayload(action) {
     let payload = {};
     const fields = refs.modal.querySelectorAll('[data-modal="text-field"]');
@@ -42,13 +66,16 @@ function actionCreatePayload(action) {
         })
     }
 
-    payload.id = uniqid();
+    if (editItemId) {
+        payload.id = editItemId;
+    } else {
+        payload.id = uniqid();
+    }
 
     const isEmptySomeValue = Object.values(payload).some(item => !item);
 
     if (!isEmptySomeValue) {
         action(payload);
-        clearFormFields();
         eventClose();
     } else {
         console.log('have empty value');
@@ -119,6 +146,7 @@ export function closeModal(event) {
 }
 
 function eventClose() {
+    clearFormFields();
     refs.modal && refs.modal.classList.remove('open');
     refs.body && refs.body.classList.remove('open-modal');
     window.removeEventListener('keydown', closeDownEsc);
