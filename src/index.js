@@ -1,6 +1,9 @@
 import 'normalize.css';
 import './scss/main.scss';
 
+// import localStorageService from './services/localstorage-service.js';
+
+import httpService from './services/api/todos-http.js';
 
 import { initModal, editTodo } from './components/modal.js';
 import { renderCardsList } from './components/list-cards.js';
@@ -12,6 +15,33 @@ const refs = {
 }
 
 refs.list = document.querySelector('[data-cards="list"]');
+
+// function restoreSaveData() {
+//     const data = localStorageService.load();
+//     if (data) {
+//         todos = [...data];
+//         renderCardsList(todos);
+//         initActions();
+//     }
+// }
+
+// restoreSaveData();
+
+async function loadList() {
+    try {
+        const data = await httpService.getTodoList();
+        console.log(data, 'DATA');
+        if (data.length) {
+            todos = [...data];
+            renderCardsList(todos);
+            initActions();
+        }
+    } catch (error) {
+        console.log('>>>>>>ERR', error.message)
+    }
+}
+
+loadList();
 
 const modalConfig = {
     selectorBtn: '[data-button="add"]',
@@ -42,6 +72,7 @@ const modalConfig = {
         }
         renderCardsList(todos);
         initActions();
+        // localStorageService.save(todos);
     },
 }
 
@@ -72,6 +103,7 @@ function handlerDeleteButton(e) {
     todos = todos.filter(todo => todo.id !== dataset.todoId);
     renderCardsList(todos);
     initActions();
+    // localStorageService.save(todos);
 }
 
 initModal(modalConfig);
