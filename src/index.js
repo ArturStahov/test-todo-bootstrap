@@ -8,7 +8,7 @@ import httpService from './services/api/todos-http.js';
 import { initModal, editTodo } from './components/modal.js';
 import { renderCardsList } from './components/list-cards.js';
 
-let todos = []
+let todos = [];
 
 const refs = {
     list: null,
@@ -63,17 +63,60 @@ const modalConfig = {
             code: 'description',
         },
     ],
-    action(payload) {
-        const idx = todos.findIndex(item => item.id === payload.id); // -1 
-        if (idx === -1) {
-            todos = [payload, ...todos];
+    async action(payload) {
+
+        if (payload.id) {
+            await editTodoAction(payload);
+
         } else {
-            todos.splice(idx, 1, payload);
+            await createTodoAction(payload);
         }
+
         renderCardsList(todos);
         initActions();
         // localStorageService.save(todos);
     },
+}
+
+async function createTodoAction(payload) {
+    try {
+        const data = await httpService.createTodo(payload);
+        todos = [data, ...todos];
+    } catch (error) {
+        console.log('>>>>>>ERR_Create', error.message)
+    }
+}
+
+async function editTodoAction(payload) {
+
+    try {
+        const editTodoID = payload.id;
+        const exclude = ['id'];
+        const editData = excludeParams(payload, exclude);
+
+        await httpService.updateTodo(editData, editTodoID);
+
+        const idx = todos.findIndex(item => item.id === payload.id); // -1 
+        if (idx !== -1) {
+            todos.splice(idx, 1, payload);
+        }
+    } catch (error) {
+        console.log('>>>>>>ERR_Create', error.message)
+    }
+}
+
+async function deleteTodoActions(deleteTodoId) {
+    try {
+        await httpService.deleteTodo(deleteTodoId);
+        todos = todos.filter(todo => todo.id !== deleteTodoId);
+    } catch (error) {
+        console.log('error', error.message);
+    }
+}
+
+function excludeParams(payload, excludeParams) {
+    const exclude = new Set(excludeParams)
+    return Object.fromEntries(Object.entries(payload).filter(e => !exclude.has(e[0])));
 }
 
 function initActions() {
@@ -98,9 +141,10 @@ function handlerEditButton(e) {
     editTodo(editItem);
 }
 
-function handlerDeleteButton(e) {
+async function handlerDeleteButton(e) {
     const { dataset } = e.target;
-    todos = todos.filter(todo => todo.id !== dataset.todoId);
+    const deleteTodoID = dataset.todoId
+    await deleteTodoActions(deleteTodoID)
     renderCardsList(todos);
     initActions();
     // localStorageService.save(todos);

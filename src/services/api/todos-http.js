@@ -26,29 +26,82 @@ export async function getTodoList() {
 }
 
 export function createTodo(payload) {
-  const createData = JSON.stringify(payload);
+  console.log('CREATE', payload)
+
+
   const options = {
-    methods: 'POST',
-    mode: 'no-cors',
+    method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json'
     },
-    body: createData
+    body: JSON.stringify(payload)
   }
 
+  return fetch(`${BASE_URL}`, options).then((response) => {
 
-  return fetch(BASE_URL, options).then((response) => response.json()).catch((error) => {
-    console.log(error), 'ERROR'
+    console.log(response, 'response');
+    if (response.ok) {
+      return response.json();
+    }
+    if (response.status === 404) {
+      throw new Error('Not found');
+    }
+    throw new Error('Something was wrong, try again');
+
+  }).catch((error) => {
+    throw new Error(error.message)
   })
 
 }
 
-export function updateTodo() {
+export function updateTodo(editData, id) {
+  console.log('UPDATE', editData)
+
+  const options = {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(editData)
+  }
+
+  return fetch(`${BASE_URL}/${id}`, options).then((response) => {
+
+    console.log(response, 'response');
+    if (response.ok) {
+      return response.json();
+    }
+    if (response.status === 404) {
+      throw new Error('Not found');
+    }
+    throw new Error('Something was wrong, try again');
+
+  }).catch((error) => {
+    throw new Error(error.message)
+  })
 
 }
 
-export function deleteTodo() {
+export function deleteTodo(id) {
 
+  const options = {
+    method: 'DELETE',
+  }
+
+  return fetch(`${BASE_URL}/${id}`, options).then((response) => {
+
+    console.log(response, 'response');
+    if (response.ok) {
+      return response.json();
+    }
+    if (response.status === 404) {
+      throw new Error('Not found');
+    }
+    throw new Error('Something was wrong, try again');
+
+  }).catch((error) => {
+    throw new Error(error.message)
+  })
 }
 
 export default {

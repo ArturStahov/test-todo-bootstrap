@@ -68,9 +68,12 @@ function actionCreatePayload(action) {
 
     if (editItemId) {
         payload.id = editItemId;
-    } else {
-        payload.id = uniqid();
     }
+    // if (editItemId) {
+    //     payload.id = editItemId;
+    // } else {
+    //     payload.id = uniqid();
+    // }
 
     const isEmptySomeValue = Object.values(payload).some(item => !item);
 
