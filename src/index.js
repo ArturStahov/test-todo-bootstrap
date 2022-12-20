@@ -72,7 +72,6 @@ function renderProcess() {
 async function createTodoAction(payload) {
     try {
         const data = await httpService.createTodo(payload);
-        console.log(data, 'DATA')
         todos = [data, ...todos];
         notification('Todo was created!', 'success');
     } catch (error) {
@@ -133,13 +132,8 @@ function handlerEditButton(e) {
 async function handlerDeleteButton(e) {
     const { dataset } = e.target;
     const deleteTodoID = dataset.todoId
-    console.log('deleteTodoID', deleteTodoID, todos)
     await deleteTodoActions(deleteTodoID)
-        .then(() => {
-            console.log('RENDER', todos)
-            renderCardsList(todos);
-            initActions();
-        })
+    renderProcess();
 }
 
 initModal(modalConfig);
