@@ -1,12 +1,5 @@
 {
-  "todos": [
-    {
-      "image": "https://cdn.pixabay.com/photo/2019/12/18/19/22/christmas-4704706_960_720.jpg",
-      "title": "test1",
-      "description": "test1szdfgsdfg",
-      "id": "lbqu0zmy"
-    }
-  ],
+  "todos": [],
   "profile": {
     "name": "typicode"
   }

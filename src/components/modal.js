@@ -1,5 +1,3 @@
-import uniqid from 'uniqid';
-
 const refs = {
     btnOpenModal: null,
     modal: null,
@@ -41,8 +39,8 @@ function openModalEvent() {
 
 
 export function editTodo(editItem) {
-    editItemId = editItem.id;
     console.log(editItem)
+    editItemId = editItem.id;
     const fields = refs.modal.querySelectorAll('[data-modal="text-field"]');
     fields.forEach(field => {
         const fieldCode = field.dataset.code;
@@ -69,11 +67,6 @@ function actionCreatePayload(action) {
     if (editItemId) {
         payload.id = editItemId;
     }
-    // if (editItemId) {
-    //     payload.id = editItemId;
-    // } else {
-    //     payload.id = uniqid();
-    // }
 
     const isEmptySomeValue = Object.values(payload).some(item => !item);
 

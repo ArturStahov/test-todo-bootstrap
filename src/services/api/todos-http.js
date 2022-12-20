@@ -10,7 +10,6 @@ export async function getTodoList() {
   }
 
   return fetch(BASE_URL, options).then((response) => {
-    console.log(response, 'response');
     if (response.ok) {
       return response.json();
     }
@@ -26,9 +25,6 @@ export async function getTodoList() {
 }
 
 export function createTodo(payload) {
-  console.log('CREATE', payload)
-
-
   const options = {
     method: 'POST',
     headers: {
@@ -55,8 +51,6 @@ export function createTodo(payload) {
 }
 
 export function updateTodo(editData, id) {
-  console.log('UPDATE', editData)
-
   const options = {
     method: 'PUT',
     headers: {
@@ -66,8 +60,6 @@ export function updateTodo(editData, id) {
   }
 
   return fetch(`${BASE_URL}/${id}`, options).then((response) => {
-
-    console.log(response, 'response');
     if (response.ok) {
       return response.json();
     }
@@ -89,8 +81,6 @@ export function deleteTodo(id) {
   }
 
   return fetch(`${BASE_URL}/${id}`, options).then((response) => {
-
-    console.log(response, 'response');
     if (response.ok) {
       return response.json();
     }
