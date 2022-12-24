@@ -6,8 +6,11 @@ import { initModal, editTodo } from './components/modal.js';
 import { renderCardsList } from './components/list-cards.js';
 import { excludeParams } from './utils/utils.js';
 import { notification } from './utils/notificator.js';
+import { initShopModal, renderShopContent } from './components/modal-shop.js'
 
 let todos = [];
+
+let shop = [];
 
 const refs = {
     list: null,
@@ -111,6 +114,7 @@ function initActions() {
     if (refs.list) {
         addEvents('[data-todo="btn-delete"]', handlerDeleteButton);
         addEvents('[data-todo="btn-edit"]', handlerEditButton);
+        addEvents('[data-todo="btn-bay"]', handlerBayButton);
     }
 }
 
@@ -121,6 +125,27 @@ function addEvents(selector, handler) {
             handler(e);
         })
     })
+}
+
+function handlerBayButton(e) {
+    console.log('bay')
+    const { todoId } = e.target.dataset;
+    const todoItem = todos.find(item => item.id === Number(todoId));
+
+    const shopItem = {
+        ...todoItem,
+        counterBay: 1
+    }
+
+    const idx = shop.findIndex(item => item.id === Number(todoId));
+    if (todoItem && idx === -1) {
+        shop = [...shop, shopItem];
+    } else {
+        shopItem.counterBay += 1;
+        shop.splice(idx, 1, shopItem);
+    }
+
+    renderShopContent(shop);
 }
 
 function handlerEditButton(e) {
@@ -137,3 +162,15 @@ async function handlerDeleteButton(e) {
 }
 
 initModal(modalConfig);
+
+
+const modalShopConfig = {
+    selectorBtn: '[data-button="shop"]',
+    selectorModal: "[data-modal-shop='shop']",
+    async action(payload) {
+        console.log(payload, 'Payload')
+    },
+}
+
+
+initShopModal(modalShopConfig);
