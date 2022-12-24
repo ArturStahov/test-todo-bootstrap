@@ -8,6 +8,7 @@ https://axios-http.com/
 - .container and media
 - font mixin
 - axios
+- test 2 user
 
 for run psevdo server install json-server from https://www.npmjs.com/package/json-server
  and enter command npm run server
