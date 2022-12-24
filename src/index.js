@@ -146,6 +146,7 @@ function handlerBayButton(e) {
     }
 
     renderShopContent(shop);
+    setCountBayingItems();
 }
 
 function handlerEditButton(e) {
@@ -174,3 +175,11 @@ const modalShopConfig = {
 
 
 initShopModal(modalShopConfig);
+
+function setCountBayingItems() {
+    const informerNode = document.querySelector('[data-button="shop-items-count"]');
+    if (informerNode) {
+        const count = shop.reduce((acc, item) => acc += item.counterBay, 0)
+        informerNode.textContent = `${count}`;
+    }
+}
