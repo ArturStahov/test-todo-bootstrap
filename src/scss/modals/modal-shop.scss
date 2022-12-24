@@ -1,0 +1,78 @@
+.modal-shop {
+  visibility: hidden;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(71, 71, 71, 0.5);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.6s ease-in-out;
+
+  &_button-close {
+    width: 30px;
+    height: 30px;
+    background: transparent;
+    color: rgb(85, 13, 13);
+    outline: none;
+    border: 2px solid rgb(85, 13, 13);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: fill 0.4s ease-in;
+
+    &:hover {
+      color: rgb(51, 51, 50);
+    }
+  }
+
+  .modal-content {
+    display: flex;
+    border-radius: 4px;
+    position: relative;
+    padding: 5px;
+    width: 400px;
+    height: 500px;
+    background-color: bisque;
+
+    &__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    &__title {
+      @include font-settings(1.6rem, 1.2, 600, #000000);
+    }
+
+    &__form-wrapper {
+      flex-grow: 1;
+      overflow-y: auto;
+    }
+
+    &__controllers {
+      display: flex;
+      justify-content: flex-end;
+
+      .btn {
+        width: 150px;
+        height: 30px;
+
+        &:not(:last-child) {
+          margin-right: 15px;
+        }
+      }
+    }
+  }
+
+  &.open {
+    visibility: visible;
+    opacity: 1;
+  }
+
+}
